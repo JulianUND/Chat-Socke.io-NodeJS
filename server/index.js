@@ -24,6 +24,14 @@ io.on('connection', function(socket){
     console.log("El cliente con IP: "+socket.handshake.address+" se ha conectado...");
     // Envio de mensajes al cliente
     socket.emit('messages',messages);
+    // Recibo los mensajes del cliente con sus respectivos datos
+    socket.on('add-message', function(data){
+        //se hace un push para añadirle un dato nuevo al array de messages
+        messages.push(data);
+        // Envio a todos los clientes que esten conectados (array de messages actualizado) 
+        io.sockets.emit('messages', messages);
+    });
+    
 });
 
 server.listen(6677, function(){
